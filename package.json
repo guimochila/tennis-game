@@ -1,0 +1,33 @@
+{
+  "name": "tennis-game",
+  "version": "0.0.1",
+  "description": "Tennis Game for learning purposes",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guimochila/tennis-game.git"
+  },
+  "author": "Guilherme Scaldelai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guimochila/tennis-game/issues"
+  },
+  "homepage": "https://github.com/guimochila/tennis-game#readme"
+}
