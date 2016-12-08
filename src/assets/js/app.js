@@ -28,7 +28,7 @@
 })(window, window.myGame = window.myGame || ''); */
 
 
-let canvas;
+var canvas;
 let canvasContext;
 let ballX = 50;
 let ballY = 50;

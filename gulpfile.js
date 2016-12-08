@@ -1,0 +1,77 @@
+// Gulfile.js for Tennis-game app
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var eslint = require('gulp-eslint');
+var plumber = require('gulp-plumber');
+var cleanCSS = require('gulp-clean-css');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+var browserSync = require('browser-sync');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+
+// Build Javascript
+gulp.task('javascript', function () {
+  return browserify({
+    entries: ['./src/assets/js/app.js'],
+    debug: true
+  })
+    .bundle()
+    .on('error', function (e) {
+      gutil.log('Browserify error: \n' + e);
+    })
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('build/assets/js'));
+});
+
+// HTML copy task
+gulp.task('html', function () {
+  return gulp.src('src/index.html')
+    .pipe(gulp.dest('build/'));
+});
+
+// Styles task
+gulp.task('styles', function () {
+  return gulp.src('src/assets/sass/**/*.sass')
+    .pipe(plumber(function (err) {
+      gutil.log('Styles task error: \n' + err);
+      this.emit('end');
+    }))
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('build/assets/css'));
+});
+
+// Eslint task - check for syntax error
+gulp.task('lint', function () {
+  return gulp.src('src/assets/js/**/*.js')
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+
+// Browser-sync reload
+gulp.task('reload', function (done) {
+  browserSync.reload();
+  done();
+});
+
+// Watch task
+gulp.task('watch', ['default'], function () {
+  browserSync.init({
+    server: {
+      baseDir: './build'
+    }
+  });
+
+  gulp.watch('src/*.html', ['html', 'reload']);
+  gulp.watch('src/assets/sass/**/*.sass', ['styles', 'reload']);
+  gulp.watch('src/assets/js/**/*.js', ['javascript', 'reload']);
+});
+
+// Default task
+gulp.task('default', ['html', 'styles', 'lint', 'javascript'], function () {});

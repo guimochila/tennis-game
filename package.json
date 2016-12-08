@@ -3,22 +3,26 @@
   "version": "0.0.1",
   "description": "Tennis Game for learning purposes",
   "main": "gulpfile.js",
-  "dependencies": {
-    "eslint": "^3.11.1",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.8.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "browser-sync": "^2.18.2",
+    "browserify": "^13.1.1",
     "eslint": "^3.11.1",
-    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.8.0"
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.2.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sourcemaps": "^1.9.1",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",
