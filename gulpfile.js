@@ -2,10 +2,12 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var eslint = require('gulp-eslint');
+var autoprefixer = require('gulp-autoprefixer');
 var plumber = require('gulp-plumber');
 var cleanCSS = require('gulp-clean-css');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
+var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
@@ -23,7 +25,9 @@ gulp.task('javascript', function () {
     })
     .pipe(source('bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(sourcemaps.init({
+      loadMaps: true
+    }))
     .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/assets/js'));
@@ -35,17 +39,33 @@ gulp.task('html', function () {
     .pipe(gulp.dest('build/'));
 });
 
-// Styles task
-gulp.task('styles', function () {
-  return gulp.src('src/assets/sass/**/*.sass')
+// Vendor's Style task
+gulp.task('vendor-styles', function () {
+  return gulp.src('src/assets/vendors/css/*.css')
     .pipe(plumber(function (err) {
       gutil.log('Styles task error: \n' + err);
       this.emit('end');
     }))
     .pipe(cleanCSS())
-    .pipe(gulp.dest('build/assets/css'));
+    .pipe(gulp.dest('build/assets/vendors/css'));
 });
 
+// Build SASS files
+gulp.task('sass', function () {
+  return gulp.src('src/assets/sass/styles.scss')
+    .pipe(plumber(function (err) {
+      gutil.log('Sass task error: \n' + err);
+      this.emit('end');
+    }))
+    .pipe(sourcemaps.init())
+    .pipe(autoprefixer())
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('build/assets/css'))
+    .pipe(browserSync.reload({ stream: true }));
+});
 // Eslint task - check for syntax error
 gulp.task('lint', function () {
   return gulp.src('src/assets/js/**/*.js')
@@ -74,4 +94,4 @@ gulp.task('watch', ['default'], function () {
 });
 
 // Default task
-gulp.task('default', ['html', 'styles', 'lint', 'javascript'], function () {});
+gulp.task('default', ['html', 'vendor-styles', 'sass', 'lint', 'javascript'], function () {});

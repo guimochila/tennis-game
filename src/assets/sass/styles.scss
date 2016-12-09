@@ -1,0 +1,13 @@
+/* Main Configuration */
+$bg-grey: #555555;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+	background-color: $bg-grey;
+	font-family: 'Lato', 'Arial', sans-serif;
+}

@@ -1,3 +1,4 @@
+
 /* ; (function (global, myGame, undefined) {
     'use strict';
 
@@ -27,7 +28,7 @@
 
 })(window, window.myGame = window.myGame || ''); */
 
-
+/*
 var canvas;
 let canvasContext;
 let ballX = 50;
@@ -195,4 +196,4 @@ function colorCircle(centerX, centerY, radius, drawColor) {
 function colorRect(leftX, topY, width, height, drawColor) {
   canvasContext.fillStyle = drawColor;
   canvasContext.fillRect(leftX, topY, width, height);
-}
+} */
