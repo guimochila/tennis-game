@@ -1,3 +1,5 @@
+'use strict';
+
 // Gulfile.js for Tennis-game app
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -17,7 +19,7 @@ var buffer = require('vinyl-buffer');
 gulp.task('javascript', function () {
   return browserify({
     entries: ['./src/assets/js/app.js'],
-    debug: true
+    debug: false
   })
     .bundle()
     .on('error', function (e) {
@@ -28,7 +30,7 @@ gulp.task('javascript', function () {
     .pipe(sourcemaps.init({
       loadMaps: true
     }))
-    .pipe(uglify())
+    // .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/assets/js'));
 });
@@ -52,7 +54,7 @@ gulp.task('vendor-styles', function () {
 
 // Build SASS files
 gulp.task('sass', function () {
-  return gulp.src('src/assets/sass/styles.scss')
+  return gulp.src('src/assets/sass/*.scss')
     .pipe(plumber(function (err) {
       gutil.log('Sass task error: \n' + err);
       this.emit('end');
@@ -89,7 +91,7 @@ gulp.task('watch', ['default'], function () {
   });
 
   gulp.watch('src/*.html', ['html', 'reload']);
-  gulp.watch('src/assets/sass/**/*.sass', ['styles', 'reload']);
+  gulp.watch('src/assets/sass/**/*.scss', ['sass', 'reload']);
   gulp.watch('src/assets/js/**/*.js', ['javascript', 'reload']);
 });
 

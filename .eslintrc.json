@@ -19,6 +19,7 @@
         "eqeqeq": 0,
         "strict": 0,
         "no-unused-vars": ["error", { "vars": "all", "args": "after-used" }],
-        "func-names": ["error", "never"]
+        "func-names": ["error", "never"],
+        "no-underscore-dangle": 0
     }
 }
