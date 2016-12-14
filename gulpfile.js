@@ -30,7 +30,7 @@ gulp.task('javascript', function () {
     .pipe(sourcemaps.init({
       loadMaps: true
     }))
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/assets/js'));
 });
