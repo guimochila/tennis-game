@@ -16,16 +16,20 @@
       x: 50,
       y: 50,
       speed: {
-        x: 5,
+        x: 8,
         y: 4
-      }
+      },
+      color: 'white'
     },
 
     // Paddle definition
     paddle: {
-      size: 250,
-      weight: 100,
-      height: 10
+      position: {
+        p1: 250,
+        p2: 250
+      },
+      weight: 10,
+      height: 100
     }
   };
 
@@ -38,8 +42,28 @@
       color: 'black'
     },
 
-    render: function (leftX, topY, width, height) {
-      this.canvas.context.fillStyle = this.canvas.color;
+    renderObjs: {
+      net: function () {
+        for (let i = 0; i < view.canvas.height; i += 40) {
+          view.render((view.canvas.width / 2) - 1, i, 2, 20, 'white');
+        }
+      },
+      player1: function () {
+        view.render(0, data.paddle.position.p1, data.paddle.weight, data.paddle.height, 'white');
+      },
+      player2: function () {
+        view.render(view.canvas.width - data.paddle.weight, data.paddle.position.p2, data.paddle.weight, data.paddle.height, 'white');
+      },
+      ball: function (x, y, radius) {
+        view.canvas.context.fillStyle = data.ball.color;
+        view.canvas.context.beginPath();
+        view.canvas.context.arc(x, y, radius, 0, Math.PI * 2, true);
+        view.canvas.context.fill();
+      }
+    },
+
+    render: function (leftX, topY, width, height, color) {
+      this.canvas.context.fillStyle = color;
       this.canvas.context.fillRect(leftX, topY, width, height);
     }
   };
@@ -47,17 +71,19 @@
   // Main controller
   var octopus = {
     init: function () {
-      // this.setMyinterval();
-      // this.view.canvas.el.addEventListener('mousemove', (e) => {
-      //   console.log(e);
-      // });
-
-      view.render(0, 0, view.canvas.width, view.canvas.height, view.canvas.color);
-
       data.mainCanva.addEventListener('mousemove', (e) => {
         var curMousePos = this.calculateMousePos(e);
-        data.paddle.size = curMousePos.y - (data.paddle.height / 2);
+        data.paddle.position.p1 = curMousePos.y - (data.paddle.height / 2);
       });
+
+      setInterval(function () {
+        octopus.move();
+        view.render(0, 0, view.canvas.width, view.canvas.height, view.canvas.color);
+        view.renderObjs.net();
+        view.renderObjs.player1();
+        view.renderObjs.player2();
+        view.renderObjs.ball(data.ball.x, data.ball.y, 10);
+      }, 1000 / 30);
     },
 
     // Calculate Mouse position
@@ -70,9 +96,60 @@
         x: mouseX,
         y: mouseY
       };
+    },
+
+    // Ball reset
+    ballReset: function () {
+      data.ball.speed.x = -data.ball.speed.x;
+      data.ball.x = view.canvas.width / 2;
+      data.ball.y = view.canvas.height / 2;
+    },
+
+    // Movement
+    move: function () {
+      // Computer Movement
+      var paddle2Center = data.paddle.position.p2 + (data.paddle.height / 2);
+      if (paddle2Center < data.ball.y - 35) {
+        data.paddle.position.p2 += 6;
+      } else if (paddle2Center > data.ball.y + 35) {
+        data.paddle.position.p2 -= 6;
+      }
+
+      data.ball.x += data.ball.speed.x;
+      data.ball.y += data.ball.speed.y;
+
+      // Player 1
+      if (data.ball.x < 0) {
+        if (data.ball.y > data.paddle.position.p1 &&
+          data.ball.y < data.paddle.position.p1 + data.paddle.height) {
+          data.ball.speed.x = -data.ball.speed.x;
+          data.ball.speed.y =
+            (data.ball.y - (data.paddle.position.p1 + (data.paddle.height / 2))) * 0.35;
+        } else {
+          // player score
+          this.ballReset();
+        }
+      }
+      if (data.ball.x > view.canvas.width) {
+        // Player 2
+        if (data.ball.y > data.paddle.position.p2 &&
+          data.ball.y < data.paddle.position.p2 + data.paddle.height) {
+          data.ball.speed.x = -data.ball.speed.x;
+          data.ball.speed.y =
+            (data.ball.y - (data.paddle.position.p2 + (data.paddle.height / 2))) * 0.35;
+        } else {
+          // player 2 scores
+          this.ballReset();
+        }
+      }
+      if (data.ball.y < 0) {
+        data.ball.speed.y = -data.ball.speed.y;
+      }
+      if (data.ball.y > view.canvas.height) {
+        data.ball.speed.y = -data.ball.speed.y;
+      }
     }
   };
-
   // App init
   octopus.init();
 }());
