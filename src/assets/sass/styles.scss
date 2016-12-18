@@ -20,6 +20,7 @@ body {
 .scores {
     background-color: #759FFF;
     color: #14357F;
+    width: auto;
     height: 40px;
     text-align: center;
     padding: 10px 10px;
@@ -32,13 +33,18 @@ span {
     font-size: 1.3em;
 }
 
-span[total] {
-    font-weight: 200;
-}
-
 .ahead {
     font-weight: 400;
     color: #CC1F58;
-    transition: font-size 2s;
-    transition: color 2s;
+    transition: font-size 0.5s;
+    transition: color 0.5s;
+}
+
+#winner {
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    padding: 5px;
+    font-weight: 400;
+    color: #CC1F58;
 }

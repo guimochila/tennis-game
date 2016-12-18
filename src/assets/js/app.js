@@ -49,9 +49,21 @@
       document.getElementById(playerId).textContent = score;
       setTimeout(function () {
         document.getElementById(label).classList.toggle('ahead');
-      }, 2000);
+      }, 500);
     },
 
+    // Render winner
+    renderWinner: function () {
+      var winnerDOM = document.getElementById('winner');
+      winnerDOM.style.display = 'block';
+      if (data.score.player1 === data.score.total) {
+        winnerDOM.textContent = 'Player 1 is the winner! Click in the canvas to reset!';
+      } else if (data.score.player2 === data.score.total) {
+        winnerDOM.textContent = 'Player 2 is the winner! Click in the canvas to reset!';
+      }
+    },
+
+    // Render Objects
     renderObjs: {
       net: function () {
         var i;
@@ -82,12 +94,31 @@
   // Main controller
   var octopus = {
     init: function () {
+      var interval;
       data.mainCanva.addEventListener('mousemove', function (e) {
         var curMousePos = octopus.calculateMousePos(e);
         data.paddle.position.p1 = curMousePos.y - (data.paddle.height / 2);
       });
 
-      setInterval(function () {
+      data.mainCanva.addEventListener('mousedown', function () {
+        if (!data.score.winner) {
+          return;
+        }
+        data.score.player1 = 0;
+        data.score.player2 = 0;
+        document.getElementById('p1Score').textContent = 0;
+        document.getElementById('p2Score').textContent = 0;
+        document.getElementById('winner').style.display = 'none';
+        data.score.winner = false;
+        octopus.init();
+      });
+
+      interval = setInterval(function () {
+        if (data.score.winner) {
+          view.renderWinner();
+          clearInterval(interval);
+          return;
+        }
         octopus.move();
         view.render(0, 0, view.canvas.width, view.canvas.height, view.canvas.color);
         view.renderObjs.net();
