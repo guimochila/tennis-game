@@ -54,7 +54,8 @@
 
     renderObjs: {
       net: function () {
-        for (let i = 0; i < view.canvas.height; i += 40) {
+        var i;
+        for (i = 0; i < view.canvas.height; i += 40) {
           view.render((view.canvas.width / 2) - 1, i, 2, 20, 'white');
         }
       },
@@ -81,8 +82,8 @@
   // Main controller
   var octopus = {
     init: function () {
-      data.mainCanva.addEventListener('mousemove', (e) => {
-        var curMousePos = this.calculateMousePos(e);
+      data.mainCanva.addEventListener('mousemove', function (e) {
+        var curMousePos = octopus.calculateMousePos(e);
         data.paddle.position.p1 = curMousePos.y - (data.paddle.height / 2);
       });
 

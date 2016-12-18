@@ -11,26 +11,12 @@ var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
 
 // Build Javascript
 gulp.task('javascript', function () {
-  return browserify({
-    entries: ['./src/assets/js/app.js'],
-    debug: false
-  })
-    .bundle()
-    .on('error', function (e) {
-      gutil.log('Browserify error: \n' + e);
-    })
-    .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({
-      loadMaps: true
-    }))
-    // .pipe(uglify())
+  return gulp.src('src/assets/js/app.js')
+    .pipe(sourcemaps.init())
+    .pipe(uglify()).on('error', gutil.log)
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/assets/js'));
 });
@@ -66,7 +52,9 @@ gulp.task('sass', function () {
     }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/assets/css'))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({
+      stream: true
+    }));
 });
 // Eslint task - check for syntax error
 gulp.task('lint', function () {
