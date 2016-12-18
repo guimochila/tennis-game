@@ -37,7 +37,7 @@ gulp.task('javascript', function () {
 
 // HTML copy task
 gulp.task('html', function () {
-  return gulp.src('src/index.html')
+  return gulp.src('src/*.html')
     .pipe(gulp.dest('build/'));
 });
 

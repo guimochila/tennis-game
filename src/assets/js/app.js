@@ -8,7 +8,8 @@
     score: {
       player1: 0,
       player2: 0,
-      winner: 3
+      total: 10,
+      winner: false
     },
 
     // Ball variables
@@ -40,6 +41,15 @@
       width: data.mainCanva.width,
       height: data.mainCanva.height,
       color: 'black'
+    },
+
+    // Render the score
+    renderScore: function (score, playerId, label) {
+      document.getElementById(label).classList.toggle('ahead');
+      document.getElementById(playerId).textContent = score;
+      setTimeout(function () {
+        document.getElementById(label).classList.toggle('ahead');
+      }, 2000);
     },
 
     renderObjs: {
@@ -100,6 +110,10 @@
 
     // Ball reset
     ballReset: function () {
+      if ((data.score.player1 >= data.score.total) || (data.score.player2 >= data.score.total)) {
+        data.score.winner = true;
+      }
+
       data.ball.speed.x = -data.ball.speed.x;
       data.ball.x = view.canvas.width / 2;
       data.ball.y = view.canvas.height / 2;
@@ -126,7 +140,9 @@
           data.ball.speed.y =
             (data.ball.y - (data.paddle.position.p1 + (data.paddle.height / 2))) * 0.35;
         } else {
-          // player score
+          // player 2 score
+          data.score.player2 += 1;
+          view.renderScore(data.score.player2, 'p2Score', 'p2Name');
           this.ballReset();
         }
       }
@@ -138,7 +154,9 @@
           data.ball.speed.y =
             (data.ball.y - (data.paddle.position.p2 + (data.paddle.height / 2))) * 0.35;
         } else {
-          // player 2 scores
+          // player 1 scores
+          data.score.player1 += 1;
+          view.renderScore(data.score.player1, 'p1Score', 'p1Name');
           this.ballReset();
         }
       }
